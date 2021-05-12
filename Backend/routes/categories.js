@@ -69,7 +69,7 @@ router.delete(`/:id`, async (req, res) => {
           .status(200)
           .json({ success: true, message: "La catégorie a été supprimée " });
       } else {
-        return res.status(200).json({
+        return res.status(400).json({
           success: false,
           message: "La catégorie n'a pas pu a être supprimée",
         });

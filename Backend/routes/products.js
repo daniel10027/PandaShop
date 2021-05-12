@@ -2,20 +2,9 @@ const { Product } = require("../models/product");
 const express = require("express");
 const { Category } = require("../models/category");
 const router = express.Router();
+const mongoose = require("mongoose");
 
-// Get all products
-
-router.get(`/`, async (req, res) => {
-  const productList = await Product.find().populate("category");
-  if (!productList) {
-    res.status(500).json({
-      success: false,
-    });
-  }
-  res.send(productList);
-});
-
-//add New product
+//Create Product
 router.post(`/`, async (req, res) => {
   const category = await Category.findById(req.body.category);
   if (!category)
@@ -43,7 +32,22 @@ router.post(`/`, async (req, res) => {
   res.send(product);
 });
 
-module.exports = router;
+// Get all products
+
+router.get(`/`, async (req, res) => {
+  let filter = {};
+  if(req.query.categories){ 
+     filter = { category : req.query.categories.split(',') }
+  }
+  const productList = await Product.find(filter).populate("category");
+
+  if (!productList) {
+    res.status(500).json({
+      success: false,
+    });
+  }
+  res.send(productList);
+});
 
 //Get Single Product
 
@@ -60,6 +64,9 @@ router.get(`/:id`, async (req, res) => {
 //update a product
 
 router.put(`/:id`, async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).send("L'Id du produit est Invalide ... !");
+  }
   const category = await Category.findById(req.body.category);
   if (!category)
     return res
@@ -89,3 +96,58 @@ router.put(`/:id`, async (req, res) => {
     return res.status(500).send("Le produit n'a pas pu être mise à jour !");
   res.send(product);
 });
+
+//Delete Product
+
+router.delete(`/:id`, async (req, res) => {
+  Product.findByIdAndRemove(req.params.id)
+    .then((product) => {
+      if (product) {
+        return res
+          .status(200)
+          .json({ success: true, message: "Le produit a été supprimée " });
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "Le produit n'a pas pu a être supprimée",
+        });
+      }
+    })
+    .catch((err) => {
+      return res.status(200).json({
+        success: false,
+        err: err,
+      });
+    });
+});
+
+// Get product Count for statistics
+
+router.get(`/get/count`, async (req, res) => {
+  const productCount = await Product.countDocuments((count) => count);
+  if (!productCount) {
+    res.status(500).json({
+      success: false,
+    });
+  }
+  res.send({
+    productCount: productCount,
+  });
+});
+
+// Get FeaturedProduct Count for statistics
+
+router.get(`/get/featured/:count`, async (req, res) => {
+  const count = req.params.count ? req.params.count : 0;
+  const products = await Product.find({ isFeatured: true }).limit(+count);
+  if (!products) {
+    res.status(500).json({
+      success: false,
+    });
+  }
+  res.send({
+    products,
+  });
+});
+
+module.exports = router;
