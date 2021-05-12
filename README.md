@@ -14,3 +14,9 @@
 
 ![alt text](https://github.com/daniel10027/PandaShop/blob/main/Backend%20User%20%26%20Notifications.png?raw=true)
 
+## 4- User & Auth Main Steps
+
+![alt text](https://github.com/daniel10027/PandaShop/blob/main/Users%20%26%20Auth%20Main%20Steps.png?raw=true)
+
+
+
