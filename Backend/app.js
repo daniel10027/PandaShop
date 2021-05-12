@@ -1,16 +1,37 @@
-// all import 
+// all import
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const cors = require('cors');
+const cors = require("cors");
+const methodOverride = require("method-override");
+
+app.use(cors());
+app.options("*", cors);
 
 require("dotenv/config");
+const authJwt = require("./helpers/jwt");
 
 //middleware
 app.use(express.json());
 app.use(morgan("tiny"));
+app.use(authJwt());
+app.use(methodOverride());
+app.use(function (err, req, res, next) {
+  if (err.name == "UnauthorizedError") {
+    //jwt authentication error
+    return res
+      .status(500)
+      .json({ message: "L'utilisatteur n'est pas autorisé... ! " });
+  }
+  if (err.name == "ValidationError") {
+    //validator error
+    return res.status(500).json({ message: err });
+  }
+  // default  to 500 server error
+  return res.status(500).json(err);
+});
 
 //Routes
 const categoriesRoutes = require("./routes/categories");
