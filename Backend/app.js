@@ -7,14 +7,14 @@ const mongoose = require("mongoose");
 require("dotenv/config");
 
 const api = process.env.API_URL;
-const productRouter = require('./routers/product')
+const productRouter = require("./routers/product");
 
+//middleware
 app.use(express.json());
 app.use(morgan("tiny"));
 
-app.use(`${api}/products`, productRouter)
-
-const Product = require('./models/product')
+//Routers
+app.use(`${api}/products`, productRouter);
 
 mongoose
   .connect(process.env.CONNECTION_STRING, {
