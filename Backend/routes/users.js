@@ -90,16 +90,16 @@ router.get(`/get/count`, async (req, res) => {
 //delete User
 
 router.delete(`/:id`, async (req, res) => {
-  Category.findByIdAndRemove(req.params.id)
-    .then((category) => {
-      if (category) {
+  User.findByIdAndRemove(req.params.id)
+    .then((user) => {
+      if (user) {
         return res
           .status(200)
-          .json({ success: true, message: "La catégorie a été supprimée " });
+          .json({ success: true, message: "L'utilisateur a été supprimée " });
       } else {
         return res.status(400).json({
           success: false,
-          message: "La catégorie n'a pas pu a être supprimée",
+          message: "L'utilisateur n'a pas pu a être supprimée",
         });
       }
     })
