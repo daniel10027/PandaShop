@@ -26,7 +26,8 @@
 
 ![alt text](https://github.com/daniel10027/PandaShop/blob/main/React%20Native%20Fundamentals%20Todo%20List.png?raw=true)
 
-
+## 8- Sample Todo List 
+![Alt Text](https://github.com/daniel10027/PandaShop/blob/main/todo_list.gif)
 
 
 
