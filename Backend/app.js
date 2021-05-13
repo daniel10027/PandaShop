@@ -8,6 +8,7 @@ const cors = require("cors");
 const methodOverride = require("method-override");
 
 app.use(cors());
+app.use("/public/uploads", express.static(__dirname + "/public/uploads"));
 app.options("*", cors);
 
 require("dotenv/config");
