@@ -18,5 +18,9 @@
 
 ![alt text](https://github.com/daniel10027/PandaShop/blob/main/Users%20%26%20Auth%20Main%20Steps.png?raw=true)
 
+## 5- Backend Orders
+
+## 6- Backend Product Image & Gallery Upload
+
 
 
