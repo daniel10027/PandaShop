@@ -137,7 +137,7 @@ router.get("/get/totalsales", async (req, res) => {
   if (!totalSales) {
     return res.status(400).send("Le nombre de vente ne peut être généré");
   }
-  res.send({totalsales: totalSales.pop().totalsales});
+  res.send({ totalsales: totalSales.pop().totalsales });
 });
 
 // Get ORDER Count for statistics
@@ -152,6 +152,22 @@ router.get(`/get/count`, async (req, res) => {
   res.send({
     orderCount: orderCount,
   });
+});
+
+//Get current user Order
+router.get(`/get/userorders/:userid`, async (req, res) => {
+  const userOrderList = await Order.find({ user: req.params.userid })
+    .populate({
+      path: "orderItems",
+      populate: { path: "product", populate: "category" },
+    })
+    .sort({ dateOrdered: -1 });
+  if (!userOrderList) {
+    res.status(500).json({
+      success: false,
+    });
+  }
+  res.send(userOrderList);
 });
 
 module.exports = router;
